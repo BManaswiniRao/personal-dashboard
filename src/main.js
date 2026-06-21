@@ -5,6 +5,7 @@ import { EventsCard } from './components/EventsCard.js';
 import { EmailsCard } from './components/EmailsCard.js';
 import { TasksCard } from './components/TasksCard.js';
 import { HabitsCard } from './components/HabitsCard.js';
+import { DateSummary } from './components/DateSummary.js';
 
 const store = createStore();
 const state = store.getState();
@@ -53,3 +54,10 @@ bottomRow.className = 'grid-2';
 bottomRow.appendChild(tasksCard);
 bottomRow.appendChild(habitsCard);
 document.getElementById('app').appendChild(bottomRow);
+
+const summaryCard = DateSummary({
+  tasks: state.tasks,
+  habits: state.habits,
+  dailyLog: state.dailyLog,
+});
+document.getElementById('app').appendChild(summaryCard);
