@@ -20,13 +20,14 @@ let syncing = false;
 
 // ── Render ──────────────────────────────────────────────────
 function render() {
-  const app = document.getElementById('app');
-  const state = store.getState();
+  try {
+    const app = document.getElementById('app');
+    const state = store.getState();
 
-  app.innerHTML = '';
+    app.innerHTML = '';
 
-  const dashboard = document.createElement('div');
-  dashboard.className = 'dashboard';
+    const dashboard = document.createElement('div');
+    dashboard.className = 'dashboard';
 
   // Header
   const header = Header({
@@ -54,24 +55,31 @@ function render() {
   // Middle row: diet + daily log
   const middleRow = document.createElement('div');
   middleRow.className = 'grid-2';
-  middleRow.appendChild(DietCard({
-    dietToday: state.diet.filter(d => d.date === new Date().toISOString().split('T')[0]),
-    onAdd: (meal, food, mood) => { store.addDietEntry(meal, food, mood); render(); },
-    onDelete: (id) => { store.deleteDietEntry(id); render(); },
-  }));
-  middleRow.appendChild(DailyLogCard({
-    dailyLog: state.dailyLog,
-    onSave: (entry) => { store.addDailyLog(entry); render(); },
-  }));
+  try {
+    middleRow.appendChild(DietCard({
+      dietToday: state.diet.filter(d => d.date === new Date().toISOString().split('T')[0]),
+      onAdd: (meal, food, mood) => { store.addDietEntry(meal, food, mood); render(); },
+      onDelete: (id) => { store.deleteDietEntry(id); render(); },
+    }));
+  } catch (e) { console.error('DietCard error:', e); }
+
+  try {
+    middleRow.appendChild(DailyLogCard({
+      dailyLog: state.dailyLog,
+      onSave: (entry) => { store.addDailyLog(entry); render(); },
+    }));
+  } catch (e) { console.error('DailyLogCard error:', e); }
 
   // Analysis
   const analysisRow = document.createElement('div');
   analysisRow.className = 'grid-1';
-  analysisRow.appendChild(AnalysisCard({
-    analysis: analysisData.insights,
-    loading: analysisData.loading,
-    onRequest: requestAnalysis,
-  }));
+  try {
+    analysisRow.appendChild(AnalysisCard({
+      analysis: analysisData.insights,
+      loading: analysisData.loading,
+      onRequest: requestAnalysis,
+    }));
+  } catch (e) { console.error('AnalysisCard error:', e); }
 
   // Bottom row: tasks + habits
   const bottomRow = document.createElement('div');
@@ -96,6 +104,10 @@ function render() {
   dashboard.appendChild(analysisRow);
   dashboard.appendChild(bottomRow);
   app.appendChild(dashboard);
+  } catch (error) {
+    console.error('Render error:', error);
+    document.getElementById('app').innerHTML = '<h1>Error loading dashboard. Check console.</h1>';
+  }
 }
 
 // ── Sync ────────────────────────────────────────────────────
