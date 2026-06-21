@@ -1,21 +1,17 @@
 // ── Main App ────────────────────────────────────────────────
 
 import { createStore } from './utils/store.js';
-import { fetchCalendarEvents, fetchEmails, getInsights } from './api/claude.js';
+import { fetchCalendarEvents, fetchEmails } from './api/claude.js';
 import { Header } from './components/Header.js';
 import { Metrics } from './components/Metrics.js';
 import { EventsCard } from './components/EventsCard.js';
 import { EmailsCard } from './components/EmailsCard.js';
 import { TasksCard } from './components/TasksCard.js';
 import { HabitsCard } from './components/HabitsCard.js';
-import { DietCard } from './components/DietCard.js';
-import { DailyLogCard } from './components/DailyLogCard.js';
-import { AnalysisCard } from './components/AnalysisCard.js';
 
 // ── App state ───────────────────────────────────────────────
 const store = createStore();
 let liveData = { events: [], emails: [], loading: true };
-let analysisData = { insights: '', loading: false };
 let syncing = false;
 
 // ── Render ──────────────────────────────────────────────────
@@ -52,35 +48,6 @@ function render() {
   topRow.appendChild(EventsCard({ events: liveData.events, loading: liveData.loading }));
   topRow.appendChild(EmailsCard({ emails: liveData.emails, loading: liveData.loading }));
 
-  // Middle row: diet + daily log
-  const middleRow = document.createElement('div');
-  middleRow.className = 'grid-2';
-  try {
-    middleRow.appendChild(DietCard({
-      dietToday: state.diet.filter(d => d.date === new Date().toISOString().split('T')[0]),
-      onAdd: (meal, food, mood) => { store.addDietEntry(meal, food, mood); render(); },
-      onDelete: (id) => { store.deleteDietEntry(id); render(); },
-    }));
-  } catch (e) { console.error('DietCard error:', e); }
-
-  try {
-    middleRow.appendChild(DailyLogCard({
-      dailyLog: state.dailyLog,
-      onSave: (entry) => { store.addDailyLog(entry); render(); },
-    }));
-  } catch (e) { console.error('DailyLogCard error:', e); }
-
-  // Analysis
-  const analysisRow = document.createElement('div');
-  analysisRow.className = 'grid-1';
-  try {
-    analysisRow.appendChild(AnalysisCard({
-      analysis: analysisData.insights,
-      loading: analysisData.loading,
-      onRequest: requestAnalysis,
-    }));
-  } catch (e) { console.error('AnalysisCard error:', e); }
-
   // Bottom row: tasks + habits
   const bottomRow = document.createElement('div');
   bottomRow.className = 'grid-2';
@@ -100,8 +67,6 @@ function render() {
   dashboard.appendChild(header);
   dashboard.appendChild(metrics);
   dashboard.appendChild(topRow);
-  dashboard.appendChild(middleRow);
-  dashboard.appendChild(analysisRow);
   dashboard.appendChild(bottomRow);
   app.appendChild(dashboard);
   } catch (error) {
@@ -133,30 +98,6 @@ async function syncAll() {
   render();
 }
 
-// ── AI Analysis ─────────────────────────────────────────────
-async function requestAnalysis() {
-  if (analysisData.loading) return;
-  analysisData.loading = true;
-  render();
-
-  try {
-    const state = store.getState();
-    const insights = await getInsights({
-      tasks: state.tasks,
-      habits: state.habits,
-      events: liveData.events,
-      emails: liveData.emails,
-      diet: state.diet,
-      dailyLog: state.dailyLog,
-    });
-    analysisData = { insights, loading: false };
-  } catch (err) {
-    console.error('Analysis failed:', err);
-    analysisData = { insights: 'Could not generate analysis. Make sure your Anthropic API key is set.', loading: false };
-  }
-
-  render();
-}
 
 // ── Boot ────────────────────────────────────────────────────
 render();
