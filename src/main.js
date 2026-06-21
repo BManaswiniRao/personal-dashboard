@@ -1,6 +1,9 @@
-document.getElementById('app').innerHTML = `
-  <div style="padding: 20px; font-family: Arial; text-align: center;">
-    <h1>✅ Dashboard is working!</h1>
-    <p>If you see this message, the app loaded successfully on Netlify.</p>
-  </div>
-`;
+import { Header } from './components/Header.js';
+
+document.getElementById('app').innerHTML = '';
+const header = Header({
+  onSync: () => alert('Sync clicked'),
+  syncing: false,
+  lastSync: null,
+});
+document.getElementById('app').appendChild(header);
