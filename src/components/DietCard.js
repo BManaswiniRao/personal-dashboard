@@ -53,15 +53,23 @@ export function DietCard({ dietToday, onAdd, onDelete }) {
 
   let selectedMood = 3;
 
-  el.querySelectorAll('.star').forEach(star => {
-    star.addEventListener('click', () => {
-      selectedMood = parseInt(star.dataset.mood);
-      el.querySelectorAll('.star').forEach(s => s.classList.remove('active'));
-      el.querySelectorAll('.star').forEach((s, i) => {
-        if (i < selectedMood) s.classList.add('active');
+  // Initialize stars
+  setTimeout(() => {
+    const stars = el.querySelectorAll('.star');
+    stars.forEach((s, i) => {
+      if (i < selectedMood) s.classList.add('active');
+    });
+
+    stars.forEach(star => {
+      star.addEventListener('click', () => {
+        selectedMood = parseInt(star.dataset.mood);
+        stars.forEach(s => s.classList.remove('active'));
+        stars.forEach((s, i) => {
+          if (i < selectedMood) s.classList.add('active');
+        });
       });
     });
-  });
+  }, 0);
 
   el.querySelector('#diet-form').addEventListener('submit', (e) => {
     e.preventDefault();
