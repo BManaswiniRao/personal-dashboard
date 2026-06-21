@@ -1,5 +1,6 @@
 import { createStore } from './utils/store.js';
 import { Header } from './components/Header.js';
+import { Metrics } from './components/Metrics.js';
 
 const store = createStore();
 const state = store.getState();
@@ -10,6 +11,13 @@ const header = Header({
   syncing: false,
   lastSync: state.lastSync,
 });
-document.getElementById('app').appendChild(header);
 
-console.log('Store loaded:', state.tasks.length, 'tasks');
+const metrics = Metrics({
+  tasks: state.tasks,
+  habits: state.habits,
+  eventsToday: 0,
+  unreadEmails: 0,
+});
+
+document.getElementById('app').appendChild(header);
+document.getElementById('app').appendChild(metrics);
