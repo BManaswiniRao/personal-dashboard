@@ -1,0 +1,15 @@
+{
+  "name": "personal-dashboard",
+  "version": "1.0.0",
+  "description": "A personal tracker dashboard with Google Calendar, Gmail, Tasks & Habits",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "vite": "^5.0.0"
+  }
+}
