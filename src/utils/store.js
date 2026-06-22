@@ -24,9 +24,14 @@ const defaultState = {
     { date: '2025-06-21', entry: 'Completed 3 important tasks. Worked out 30 mins. Feeling productive!' },
     { date: '2025-06-20', entry: 'Had a good day. Finished the project milestone.' },
   ],
+  reminders: [
+    { id: 1, name: 'SIP', amount: 500, bank: 'ICICI', dueDay: 5, frequency: 'monthly' },
+    { id: 2, name: 'HDFC', amount: 100, bank: 'HDFC', dueDay: 6, frequency: '15days' },
+  ],
   taskCounter: 5,
   habitCounter: 5,
   dietCounter: 3,
+  reminderCounter: 3,
   lastSync: null,
 };
 
@@ -164,6 +169,28 @@ export function createStore() {
 
     getDailyLog(date) {
       return state.dailyLog.find(d => d.date === date);
+    },
+
+    // ── Reminders ──────────────────────────────────────────
+    addReminder(name, amount, bank, dueDay, frequency) {
+      state = {
+        ...state,
+        reminders: [...state.reminders, { id: state.reminderCounter, name, amount, bank, dueDay, frequency }],
+        reminderCounter: state.reminderCounter + 1,
+      };
+      save(state);
+      notify();
+    },
+
+    deleteReminder(id) {
+      state = { ...state, reminders: state.reminders.filter(r => r.id !== id) };
+      save(state);
+      notify();
+    },
+
+    markReminderPaid(id) {
+      console.log('Marked reminder', id, 'as paid');
+      this.deleteReminder(id);
     },
   };
 }

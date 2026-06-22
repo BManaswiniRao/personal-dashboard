@@ -594,6 +594,118 @@ body {
   font-style: italic;
 }
 
+/* ── Reminders ───────────────────────────────────────────── */
+.reminder-section {
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 0.5px solid var(--color-border);
+}
+
+.reminder-section:last-child {
+  border-bottom: none;
+}
+
+.reminder-section h3 {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.reminder-section.urgent {
+  background: rgba(227, 37, 37, 0.05);
+  padding: 8px;
+  border-radius: var(--radius-md);
+  border: 0.5px solid rgba(227, 37, 37, 0.2);
+}
+
+.reminder-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 0;
+}
+
+.reminder-item.urgent-item {
+  padding: 8px;
+  background: var(--color-bg);
+  border-radius: var(--radius-sm);
+}
+
+.reminder-info {
+  flex: 1;
+}
+
+.reminder-name {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text);
+}
+
+.reminder-details {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  margin-top: 2px;
+}
+
+.paid-btn {
+  background: var(--color-teal);
+  color: white;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
+
+.paid-btn:hover {
+  background: var(--color-teal-text);
+}
+
+.form-reminder {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 0.5px solid var(--color-border);
+}
+
+.form-reminder input,
+.form-reminder select {
+  font-size: 13px;
+  padding: 6px 10px;
+  border: 0.5px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  background: var(--color-bg);
+  color: var(--color-text);
+  outline: none;
+  font-family: var(--font-sans);
+}
+
+.form-reminder input:focus,
+.form-reminder select:focus {
+  border-color: var(--color-blue);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.text-muted {
+  font-size: 12px;
+  color: var(--color-text-muted);
+  font-style: italic;
+  padding: 4px 0;
+}
+
 /* ── Date Summary ────────────────────────────────────────── */
 .date-input {
   padding: 6px 10px;

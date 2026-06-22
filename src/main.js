@@ -6,6 +6,7 @@ import { EmailsCard } from './components/EmailsCard.js';
 import { TasksCard } from './components/TasksCard.js';
 import { HabitsCard } from './components/HabitsCard.js';
 import { DateSummary } from './components/DateSummary.js';
+import { RemindersCard } from './components/RemindersCard.js';
 
 const store = createStore();
 const state = store.getState();
@@ -61,3 +62,11 @@ const summaryCard = DateSummary({
   dailyLog: state.dailyLog,
 });
 document.getElementById('app').appendChild(summaryCard);
+
+const remindersCard = RemindersCard({
+  reminders: state.reminders,
+  onAdd: (name, amount, bank, day, freq) => { store.addReminder(name, amount, bank, day, freq); location.reload(); },
+  onDelete: (id) => { store.deleteReminder(id); location.reload(); },
+  onMarkPaid: (id) => { store.markReminderPaid(id); location.reload(); },
+});
+document.getElementById('app').appendChild(remindersCard);
